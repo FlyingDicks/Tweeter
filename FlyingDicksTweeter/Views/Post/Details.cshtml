@@ -1,0 +1,29 @@
+﻿@model FlyingDicksTweeter.Models.Post
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <article>
+        <header>
+            <h4>
+                @Model.Author.FullName
+            </h4>
+        </header>
+        <p>
+            @Model.Content
+        </p>
+        <small class="author">
+            @Model.DateAdded.Day - @Model.DateAdded.Month - @Model.DateAdded.Year
+            <br/>
+            tuk trqbva da ima broi spodelqniq eventualno i komentari
+        </small>
+        <footer class="pull-right">
+            @Html.ActionLink("Edit", "Edit", "Post", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
+            @Html.ActionLink("Delete", "Delete", "Post", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+            @Html.ActionLink("Back", "Index", "Article", null, new { @class = "btn btn-default btn-xs" })
+        </footer>
+    </article>
+</div>
+<hr />

@@ -1,0 +1,30 @@
+﻿@model List<FlyingDicksTweeter.Models.Post>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<div class="container">
+    <div class="row">
+        @foreach (var post in Model)
+        {
+            <div class="col-sm-6">
+                <article>
+                    <header>
+                        <h4>
+                            @Html.ActionLink(@post.Author.FullName + " tweetered", "Details", "Post", new { @id = post.Id }, null)
+                        </h4>
+                    </header>
+                    <p>
+                        @post.Content
+                    </p>
+                    <small class="author">
+                        @post.DateAdded.Day - @post.DateAdded.Month - @post.DateAdded.Year
+                        <br />
+                    </small>
+                </article>
+            </div>
+        }
+    </div>
+</div>
+<hr />
