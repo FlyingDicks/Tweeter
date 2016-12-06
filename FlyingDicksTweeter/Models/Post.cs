@@ -22,5 +22,10 @@ namespace FlyingDicksTweeter.Models
         public DateTime DateAdded { get; set; }
 
         public ApplicationUser Author { get; set; }
+
+        public bool IsAuthor(string name)
+        {
+            return this.Author.UserName.Equals(name);
+        }
     }
 }

@@ -20,8 +20,11 @@
             tuk trqbva da ima broi spodelqniq eventualno i komentari
         </small>
         <footer class="pull-right">
-            @Html.ActionLink("Edit", "Edit", "Post", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
-            @Html.ActionLink("Delete", "Delete", "Post", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+            @if (User.IsInRole("Admin") || Model.IsAuthor(User.Identity.Name))
+            {
+                @Html.ActionLink("Edit", "Edit", "Post", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
+                @Html.ActionLink("Delete", "Delete", "Post", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+            }
             @Html.ActionLink("Back", "List", "Post", null, new { @class = "btn btn-default btn-xs" })
         </footer>
     </article>
