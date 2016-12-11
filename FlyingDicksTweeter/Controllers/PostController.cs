@@ -143,6 +143,7 @@ namespace FlyingDicksTweeter.Controllers
             {
                 var post = database.Posts
                     .Where(a => a.Id == id)
+                    .Include(a => a.Author)
                     .First();
 
                 if (!IsUserAuthorizedToEdit(post))
