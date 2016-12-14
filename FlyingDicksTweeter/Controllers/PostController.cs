@@ -67,6 +67,7 @@ namespace FlyingDicksTweeter.Controllers
                     post.Author = author;
 
                     database.Posts.Add(post);
+                    AssignTags(post, database);
                     database.SaveChanges();
 
                     return RedirectToAction("Index");
@@ -119,6 +120,7 @@ namespace FlyingDicksTweeter.Controllers
                     .Include(a => a.Author)
                     .First();
 
+
                 if (post == null)
                 {
                     return HttpNotFound();
@@ -126,6 +128,7 @@ namespace FlyingDicksTweeter.Controllers
 
                 database.Posts.Remove(post);
                 database.SaveChanges();
+                CheckEmptyTags();
 
                 return RedirectToAction("Index");
             }
@@ -176,8 +179,12 @@ namespace FlyingDicksTweeter.Controllers
 
                     post.Content = model.Content;
 
+                    EditTags(post, database);
+
                     database.Entry(post).State = EntityState.Modified;
                     database.SaveChanges();
+
+                    CheckEmptyTags();
 
                     return RedirectToAction("Index");
                 }
@@ -192,6 +199,70 @@ namespace FlyingDicksTweeter.Controllers
             bool isAuthor = post.IsAuthor(this.User.Identity.Name);
 
             return isAdmin || isAuthor;
+        }
+
+        private void AssignTags(Post post, ApplicationDbContext database)
+        {
+            foreach (var word in post.Content.Split())
+            {
+                if (word.StartsWith("#"))
+                {
+                    var tags = database.Tags.ToList();
+                    bool checker = false;
+                    foreach (var item in tags)
+                    {
+                        if (item.Name.Equals(word))
+                        {
+                            checker = true;
+                            break;
+                        }
+                    }
+                    if (!checker)
+                    {
+                        Tag tag = new Tag();
+                        tag.Name = word;
+                        tag.Posts.Add(post);
+                        post.Tags.Add(tag);
+                        database.Tags.Add(tag);
+
+                    }
+                    else
+                    {
+                        foreach (var item in tags)
+                        {
+                            if (item.Name.Equals(word))
+                            {
+                                Tag tag = item;
+                                tag.Posts.Add(post);
+                                post.Tags.Add(tag);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void CheckEmptyTags()
+        {
+            using (var database = new ApplicationDbContext())
+            {
+                var tags = database.Tags.ToList();
+                foreach (var item in tags)
+                {
+                    if (item.Posts.Count().Equals(0))
+                    {
+                        database.Tags.Remove(item);
+                    }
+                }
+                database.SaveChanges();
+            }
+        }
+
+        private void EditTags(Post post, ApplicationDbContext database)
+        {
+            post.Tags.Clear();
+            AssignTags(post, database);
         }
     }
 }

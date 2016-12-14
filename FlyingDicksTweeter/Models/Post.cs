@@ -8,9 +8,19 @@ namespace FlyingDicksTweeter.Models
 {
     public class Post
     {
+        private ICollection<Tag> tags;
         public Post()
         {
+            this.tags = new HashSet<Tag>();
             this.DateAdded = DateTime.Now;
+        }
+
+        //!
+        public Post(string authorId, string content)
+        {
+            this.Author.Id = authorId;
+            this.Content = content;
+            this.tags = new HashSet<Tag>();
         }
 
         [Key]
@@ -26,6 +36,12 @@ namespace FlyingDicksTweeter.Models
         public bool IsAuthor(string name)
         {
             return this.Author.UserName.Equals(name);
+        }
+
+        public virtual ICollection<Tag> Tags
+        {
+            get { return this.tags; }
+            set { this.tags = value; }
         }
     }
 }

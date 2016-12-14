@@ -15,7 +15,17 @@
                         </h4>
                     </header>
                     <p>
-                        @post.Content
+                        @foreach (var word in post.Content.Split())
+                        {
+                            if (word.ToString().StartsWith("#"))
+                            {
+                                <strong> @word </strong>
+                            }
+                            else
+                            {
+                                @:@word
+                        }
+                        }
                     </p>
                     <small class="author">
                         @post.DateAdded.Day - @post.DateAdded.Month - @post.DateAdded.Year

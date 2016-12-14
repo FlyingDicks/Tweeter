@@ -12,7 +12,17 @@
             </h4>
         </header>
         <p>
-            @Model.Content
+            @foreach (var word in Model.Content.Split())
+            {
+                if (word.ToString().StartsWith("#"))
+                {
+                    <strong> @word </strong>
+                }
+                else
+                {
+                    @:@word
+                }
+            }
         </p>
         <small class="author">
             @Model.DateAdded.Day - @Model.DateAdded.Month - @Model.DateAdded.Year
