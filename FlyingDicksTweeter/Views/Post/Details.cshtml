@@ -25,7 +25,14 @@
             }
         </p>
         <small class="author">
-            @Model.DateAdded.Day - @Model.DateAdded.Month - @Model.DateAdded.Year
+            @if (Model.DateAdded.Date == DateTime.Today.Date)
+            {
+                @:@Model.DateAdded.Hour : @Model.DateAdded.Minute : @Model.DateAdded.Second - Today
+            }
+            else
+            {
+                @:@Model.DateAdded.Day / @Model.DateAdded.Month / @Model.DateAdded.Year
+            }
             <br/>
             tuk trqbva da ima broi spodelqniq eventualno i komentari
         </small>

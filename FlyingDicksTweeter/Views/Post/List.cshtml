@@ -28,7 +28,14 @@
                         }
                     </p>
                     <small class="author">
-                        @post.DateAdded.Day - @post.DateAdded.Month - @post.DateAdded.Year
+                        @if (post.DateAdded.Date == DateTime.Today.Date)
+                        {
+                            @:@post.DateAdded.Hour : @post.DateAdded.Minute : @post.DateAdded.Second - Today 
+                        }
+                        else
+                        {
+                            @:@post.DateAdded.Day / @post.DateAdded.Month / @post.DateAdded.Year
+                        }
                         <br/>
                     </small>
                 </article>
