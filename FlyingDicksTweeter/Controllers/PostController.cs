@@ -208,18 +208,11 @@ namespace FlyingDicksTweeter.Controllers
                 if (word.StartsWith("#"))
                 {
                     var tags = database.Tags.ToList();
-                    bool checker = false;
-                    foreach (var item in tags)
+                    //bool checker = false;
+                    Tag tag = tags.Where(t => t.Name.Equals(word)).FirstOrDefault();
+                    if (tag == null)
                     {
-                        if (item.Name.Equals(word))
-                        {
-                            checker = true;
-                            break;
-                        }
-                    }
-                    if (!checker)
-                    {
-                        Tag tag = new Tag();
+                        tag = new Tag();
                         tag.Name = word;
                         tag.Posts.Add(post);
                         post.Tags.Add(tag);
@@ -228,16 +221,8 @@ namespace FlyingDicksTweeter.Controllers
                     }
                     else
                     {
-                        foreach (var item in tags)
-                        {
-                            if (item.Name.Equals(word))
-                            {
-                                Tag tag = item;
-                                tag.Posts.Add(post);
-                                post.Tags.Add(tag);
-                                break;
-                            }
-                        }
+                        tag.Posts.Add(post);
+                        post.Tags.Add(tag);
                     }
                 }
             }
@@ -248,14 +233,12 @@ namespace FlyingDicksTweeter.Controllers
             using (var database = new ApplicationDbContext())
             {
                 var tags = database.Tags.ToList();
-                foreach (var item in tags)
+                Tag tag = tags.Where(t => t.Posts.Count.Equals(0)).FirstOrDefault();
+                if (tag != null)
                 {
-                    if (item.Posts.Count().Equals(0))
-                    {
-                        database.Tags.Remove(item);
-                    }
+                    database.Tags.Remove(tag);
+                    database.SaveChanges();
                 }
-                database.SaveChanges();
             }
         }
 
