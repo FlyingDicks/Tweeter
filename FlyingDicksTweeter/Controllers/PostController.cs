@@ -54,7 +54,7 @@ namespace FlyingDicksTweeter.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Create(Post post)
+        public ActionResult Create(Post post, HttpPostedFileBase image1)
         {
             if (ModelState.IsValid)
             {
@@ -66,6 +66,13 @@ namespace FlyingDicksTweeter.Controllers
 
                     post.Author = author;
 
+                    if (image1 != null)
+                    {
+
+                        post.Image = new byte[image1.ContentLength];
+                        image1.InputStream.Read(post.Image, 0, image1.ContentLength);
+                    }
+                    
                     database.Posts.Add(post);
                     AssignTags(post, database);
                     database.SaveChanges();

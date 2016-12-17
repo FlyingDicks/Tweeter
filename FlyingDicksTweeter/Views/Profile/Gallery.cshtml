@@ -1,0 +1,35 @@
+﻿@model List<byte[]>
+@{
+    ViewBag.Title = "Gallery";
+}
+
+<h2>Images from @ViewBag.Username:</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <p>Tuka ni trebvat buton do homepage i do profil</p>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        @foreach (var image in Model)
+        {
+            <div class="col-md-4 left">
+                @if (image != null)
+                {
+                    var base64 = Convert.ToBase64String(image);
+                    var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+
+                    <img src="@imgsrc" style="width:480px; height:360px" />
+
+                }
+            </div>
+        }
+    </div>
+</div>
+
+

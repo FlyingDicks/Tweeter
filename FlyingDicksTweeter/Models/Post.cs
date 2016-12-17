@@ -38,6 +38,8 @@ namespace FlyingDicksTweeter.Models
             return this.Author.UserName.Equals(name);
         }
 
+        public byte[] Image { get; set; }
+
         public virtual ICollection<Tag> Tags
         {
             get { return this.tags; }

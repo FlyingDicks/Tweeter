@@ -11,5 +11,7 @@ namespace FlyingDicksTweeter.Models
 
         public string AuthorId { get; set; }
 
+        public byte[] Image { get; set; }
+
     }
 }

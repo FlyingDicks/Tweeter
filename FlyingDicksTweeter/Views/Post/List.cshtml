@@ -5,7 +5,7 @@
 }
 <div class="container" >
     <div class="row">
-        @foreach (var post in Model)
+        @foreach (var post in Model.OrderByDescending(a=>a.DateAdded))
         {
             <div class="col-sm-6" align="center">
                 <article >
@@ -27,6 +27,22 @@
                         }
                         }
                     </p>
+
+                    <p>
+                        @if (post.Image != null)
+                        {
+                            var base64 = Convert.ToBase64String(post.Image);
+                            var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+                            <a href="/Profile/Gallery/@post.Author.Id">
+                                <img src="@imgsrc" style="width:720px; height:480px" />
+                            </a>
+                        }
+                        @*else
+            {
+                <img src="http://wonkville.net/wp-content/uploads/2016/04/No-image-available.jpg" style="width: 300px; height:200px" />
+            }*@
+                    </p>
+
                     <small class="author">
                         @if (post.DateAdded.Date == DateTime.Today.Date)
                         {
