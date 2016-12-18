@@ -46,11 +46,15 @@
                     <small class="author">
                         @if (post.DateAdded.Date == DateTime.Today.Date)
                         {
-                            @:@post.DateAdded.Hour : @post.DateAdded.Minute : @post.DateAdded.Second - Today 
+                            @:@post.DateAdded.Hour : @post.DateAdded.Minute : @post.DateAdded.Second - Today. 
+                            <br/>
+                            @:@post.Comments.Count - comments.
                         }
                         else
                         {
                             @:@post.DateAdded.Day / @post.DateAdded.Month / @post.DateAdded.Year
+                        <br/>
+                        @:@post.Comments.Count - comments.
                         }
                         <br/>
                     </small>

@@ -1,4 +1,6 @@
-﻿@model FlyingDicksTweeter.Models.Post
+﻿@using FlyingDicksTweeter.Models
+@using System.Data.Entity
+@model Post
 
 @{
     ViewBag.Title = "Details";
@@ -34,15 +36,81 @@
                 @:@Model.DateAdded.Day / @Model.DateAdded.Month / @Model.DateAdded.Year
             }
             <br/>
-            tuk trqbva da ima broi spodelqniq eventualno i komentari
         </small>
-        <footer class="pull-right">
-            @if (User.IsInRole("Admin") || Model.IsAuthor(User.Identity.Name))
+
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle btn btn-success" data-toggle="dropdown" role="button" aria-expanded="false">
+                Add Comment<span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    @{
+                        int id = Model.Id;
+                    }
+                    @Html.Partial("../Comment/_Create", new Comment(id))
+                </li>
+            </ul>
+        </div>
+        <footer>
+            <div class="pull-right">
+                @if (User.IsInRole("Admin") || Model.IsAuthor(User.Identity.Name))
             {
-                @Html.ActionLink("Edit", "Edit", "Post", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
-                @Html.ActionLink("Delete", "Delete", "Post", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+                    @Html.ActionLink("Edit", "Edit", "Post", new { @id = Model.Id }, new { @class = "btn btn-success btn-xs" })
+                    @Html.ActionLink("Delete", "Delete", "Post", new { @id = Model.Id }, new { @class = "btn btn-danger btn-xs" })
+                }
+                @Html.ActionLink("Back", "List", "Post", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+            @if (@Model.Comments.Any())
+            {
+
+                <div class="container pull-left">
+                    <br />
+                    @foreach (var item in Model.Comments.OrderByDescending(c => c.DateAdded))
+                {
+                    using (var db = new ApplicationDbContext())
+                    {
+                        Comment comment = db.Comments.Where(c => c.Id == item.Id).Include(a => a.Author).First();
+                            <div class="well" style="background-color:#5CEBCE;text-align:center;">
+                                <strong>@comment.Author.FullName</strong> Commented <br />
+                                @comment.Content <br />
+                                @if (comment.DateAdded.Date == DateTime.Today.Date)
+                                {
+                                    @:@comment.DateAdded.Hour : @comment.DateAdded.Minute : @comment.DateAdded.Second - Today <br />
+                            }
+                                else
+                                {
+                                    @:@comment.DateAdded.Day / @comment.DateAdded.Month / @comment.DateAdded.Year <br />
+                            }
+                                @if (User.IsInRole("Admin") || comment.IsAuthor(User.Identity.Name))
+                                {
+                                    <div class="dropdown" role="group" aria-label="...">
+                                        <div class="btn-group" role="group">
+                                            <a href="#" class="dropdown-toggle btn btn-success btn-xs" data-toggle="dropdown" role="button" aria-expanded="false">Edit<span class="caret"></span></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    @Html.Partial("../Comment/_Edit", comment)
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group" role="group">
+                                            <a href="#" class="dropdown-toggle btn btn-danger btn-xs" data-toggle="dropdown" role="button" aria-expanded="false">Delete<span class="caret"></span></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    @Html.Partial("../Comment/_Delete", comment)
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                }
+
+                            </div>
+
+                        }
+                    }
+                </div>
+
             }
-            @Html.ActionLink("Back", "List", "Post", null, new { @class = "btn btn-default btn-xs" })
         </footer>
     </article>
 </div>

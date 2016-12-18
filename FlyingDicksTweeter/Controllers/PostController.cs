@@ -23,6 +23,7 @@ namespace FlyingDicksTweeter.Controllers
             {
                 var posts = database.Posts
                     .Include(a => a.Author)
+                    .Include(c => c.Comments)
                     .ToList();
                 
                 return View(posts);
@@ -41,6 +42,7 @@ namespace FlyingDicksTweeter.Controllers
                 var post = database.Posts
                     .Where(a => a.Id == id)
                     .Include(a => a.Author)
+                    .Include(c => c.Comments)
                     .First();
 
                 return View(post);
@@ -125,6 +127,7 @@ namespace FlyingDicksTweeter.Controllers
                 var post = database.Posts
                     .Where(a => a.Id == id)
                     .Include(a => a.Author)
+                    .Include(c => c.Comments)
                     .First();
 
 
@@ -132,6 +135,8 @@ namespace FlyingDicksTweeter.Controllers
                 {
                     return HttpNotFound();
                 }
+
+                RemoveComments(post, database);
 
                 database.Posts.Remove(post);
                 database.SaveChanges();
@@ -244,8 +249,8 @@ namespace FlyingDicksTweeter.Controllers
                 if (tag != null)
                 {
                     database.Tags.Remove(tag);
-                    database.SaveChanges();
                 }
+                database.SaveChanges();
             }
         }
 
@@ -253,6 +258,15 @@ namespace FlyingDicksTweeter.Controllers
         {
             post.Tags.Clear();
             AssignTags(post, database);
+        }
+
+        private void RemoveComments (Post post, ApplicationDbContext database)
+        {
+            List<Comment> comments = post.Comments.ToList();
+            foreach (var comment in comments)
+            {
+                database.Comments.Remove(comment);
+            }
         }
     }
 }

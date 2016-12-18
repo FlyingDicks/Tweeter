@@ -8,11 +8,13 @@ namespace FlyingDicksTweeter.Models
 {
     public class Post
     {
+        private ICollection<Comment> comments;
         private ICollection<Tag> tags;
         public Post()
         {
             this.tags = new HashSet<Tag>();
             this.DateAdded = DateTime.Now;
+            this.comments = new HashSet<Comment>();
         }
 
         //!
@@ -21,6 +23,7 @@ namespace FlyingDicksTweeter.Models
             this.Author.Id = authorId;
             this.Content = content;
             this.tags = new HashSet<Tag>();
+            this.comments = new HashSet<Comment>();
         }
 
         [Key]
@@ -44,6 +47,12 @@ namespace FlyingDicksTweeter.Models
         {
             get { return this.tags; }
             set { this.tags = value; }
+        }
+
+        public virtual ICollection<Comment> Comments
+        {
+            get { return this.comments; }
+            set { this.comments = value; }
         }
     }
 }
