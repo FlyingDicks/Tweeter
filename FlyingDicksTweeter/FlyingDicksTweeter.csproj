@@ -227,6 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\slider.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -279,12 +280,12 @@
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\Search\SearchName.cshtml" />
-    <Content Include="Views\Profile\Profile.cshtml" />
-    <Content Include="Views\Profile\Gallery.cshtml" />
-    <Content Include="Views\Profile\Slider.cshtml" />
     <Content Include="Views\Comment\_Create.cshtml" />
     <Content Include="Views\Comment\_Delete.cshtml" />
     <Content Include="Views\Comment\_Edit.cshtml" />
+    <Content Include="Views\Profile\Gallery.cshtml" />
+    <Content Include="Views\Profile\Profile.cshtml" />
+    <Content Include="Views\Profile\Slider.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -32,7 +32,6 @@ namespace FlyingDicksTweeter.Controllers
 
             var picsByUser = context.Posts.Where(a => a.Author.Id == user.Id)
                 .OrderByDescending(a => a.DateAdded)
-                .Select(a => a.Image)
                 .ToList();
 
             var username = user.FullName;
@@ -41,33 +40,46 @@ namespace FlyingDicksTweeter.Controllers
 
             return View(picsByUser);
         }
-        public ActionResult Slider()
+        public ActionResult Slider(int id)
         {
-            //var db = new ApplicationDbContext();
+            var db = new ApplicationDbContext();
 
-            //var pic = db.Posts.Find(picID);
 
-            //var userID = pic.Author.Id;
+            var post = db.Posts.Find(id);
 
-            //var user = db.Users.Find(userID);
+            var IQueryable = db.Posts.Where(a => a.Id == post.Id).Select(a => a.Author.Id);
 
-            //var picsByUser = db.Posts.Where(a => a.Author.Id == user.Id)
-            //    .OrderByDescending(a => a.DateAdded)
-            //    .Select(a => a.Image)
-            //    .ToList();
+            var userID = (from Comp in db.Posts where (Comp.Id == post.Id) select Comp.Author.Id).Single();
 
-            //for (int i = 0; i < picsByUser.Count; i++)
-            //{
-            //    if(picsByUser[0] == pic.Image)
-            //    {
-            //        break;
-            //    }
-            //    var a = picsByUser[0];
-            //    picsByUser.RemoveAt(0);
-            //    picsByUser.Add(a);
-            //}
+            var user = db.Users.Find(userID);
 
-            return View();
+            var picsByUser = db.Posts.Where(a => a.Author.Id == user.Id)
+                .OrderByDescending(a => a.DateAdded)
+                .Select(a => a.Image)
+                .ToList();
+
+            for (int i = 0; i < picsByUser.Count; i++)
+            {
+                if (picsByUser == null)
+                {
+                    picsByUser.RemoveAt(i);
+                }
+            }
+            var picFromWhereToStart = post.Image;
+
+
+            for (int i = 0; i < picsByUser.Count; i++)
+            {
+                if (Convert.ToBase64String(picsByUser[0]) == Convert.ToBase64String(picFromWhereToStart))
+                {
+                    break;
+                }
+                var a = picsByUser[0];
+                picsByUser.RemoveAt(0);
+                picsByUser.Add(a);
+            }
+
+            return View(picsByUser);
         }
     }
 }

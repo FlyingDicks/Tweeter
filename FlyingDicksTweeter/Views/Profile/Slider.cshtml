@@ -1,8 +1,47 @@
-﻿
+﻿@model List<byte[]>
+
 @{
     ViewBag.Title = "Slider";
 }
 
 <h2>Slider</h2>
+<button value="U levo" onclick="plusDivs(-1)" align="left" style="width:150px; height:75px">U levo</button>
+<button value="U desno" onclick="plusDivs(1)" align="right" style="width:150px; height:75px">U desno </button>
+
+
+<div>
+    <figure>
+        @foreach (var image in Model)
+        {
+            if (image != null)
+            {
+                var base64 = Convert.ToBase64String(image);
+                var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+                <img class="mySlides" src="@imgsrc" style="width:100%" />
+            }
+        }
+    </figure>
+</div>
+
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  x[slideIndex-1].style.display = "block";
+}
+</script>
+
 
 

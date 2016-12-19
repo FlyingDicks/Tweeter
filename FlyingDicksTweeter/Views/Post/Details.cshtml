@@ -27,6 +27,17 @@
                 }
             }
         </p>
+        <p>
+            @if (Model.Image != null)
+            {
+                var base64 = Convert.ToBase64String(Model.Image);
+                var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+
+                <a href="~/Profile/Gallery/@Model.Author.Id">
+                    <img src="@imgsrc" style="width:480px; height:360px" />
+                </a>
+            }
+        </p>
 
         <div id="disqus_thread"></div>
         <script>
