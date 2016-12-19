@@ -339,37 +339,7 @@ namespace FlyingDicksTweeter.Controllers
             base.Dispose(disposing);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> UploadPhoto(HttpPostedFileBase file)
-        {
-            if (file != null && file.ContentLength > 0)
-            {
-                var user = await GetCurrentUserAsync();
-                var username = user.UserName;
-                var fileExt = Path.GetExtension(file.FileName);
-                var fnm = username + ".png";
-                if (fileExt.ToLower().EndsWith(".png") ||
-                    fileExt.ToLower().EndsWith(".jpg") ||
-                    fileExt.ToLower().EndsWith(".gif"))
-                {
-                    //Path
-                    var filePath = HostingEnvironment.MapPath("~/Content/images/") + fnm;
-                    var directory = new DirectoryInfo(HostingEnvironment.MapPath("~/Content/images/"));
-                    if (directory.Exists == false)
-                    {
-                        directory.Create();
-                    }
-                    ViewBag.FilePath = filePath.ToString();
-                    file.SaveAs(filePath);
-                    return RedirectToAction("Index", new {Message = ManageMessageId.PhotoUploadSuccess});
-                }
-            }
-            else
-            {
-                return RedirectToAction("Index", new {Message = ManageMessageId.FileExtensionError});
-            }
-            return RedirectToAction("Index", new { Message = ManageMessageId.Error });
-        }
+        
 
         #region Helpers
         // Used for XSRF protection when adding external logins

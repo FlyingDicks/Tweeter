@@ -3,16 +3,26 @@
 @{
     ViewBag.Title = "List";
 }
-<div class="container" >
+<div class="container">
     <div class="row">
-        @foreach (var post in Model.OrderByDescending(a=>a.DateAdded))
+        @foreach (var post in Model.OrderByDescending(a => a.DateAdded))
         {
             <div class="col-sm-6" align="center">
-                <article >
+                <article>
                     <header>
                         <h4>
-                            @Html.ActionLink(@post.Author.FullName + " duckered", "Details", "Post", new {@id = post.Id}, null)
+                            @Html.ActionLink(@post.Author.FullName + " duckered", "Details", "Post", new { @id = post.Id }, null)
                         </h4>
+                        <div id="fb-root"></div>
+                        <script>
+                        (function (d, s, id) {
+                            var js, fjs = d.getElementsByTagName(s)[0];
+                            if (d.getElementById(id)) return;
+                            js = d.createElement(s); js.id = id;
+                            js.src = "//connect.facebook.net/bg_BG/sdk.js#xfbml=1&version=v2.8";
+                            fjs.parentNode.insertBefore(js, fjs);
+                        }(document, 'script', 'facebook-jssdk'));
+                        </script>
                     </header>
                     <p>
                         @foreach (var word in post.Content.Split())
@@ -38,25 +48,28 @@
                             </a>
                         }
                         @*else
-            {
-                <img src="http://wonkville.net/wp-content/uploads/2016/04/No-image-available.jpg" style="width: 300px; height:200px" />
-            }*@
+                            {
+                                <img src="http://wonkville.net/wp-content/uploads/2016/04/No-image-available.jpg" style="width: 300px; height:200px" />
+                            }*@
+
                     </p>
+
+                   
 
                     <small class="author">
                         @if (post.DateAdded.Date == DateTime.Today.Date)
                         {
-                            @:@post.DateAdded.Hour : @post.DateAdded.Minute : @post.DateAdded.Second - Today. 
-                            <br/>
+                            @:@post.DateAdded.Hour : @post.DateAdded.Minute : @post.DateAdded.Second - Today.
+                            <br />
                             @:@post.Comments.Count - comments.
                         }
                         else
                         {
                             @:@post.DateAdded.Day / @post.DateAdded.Month / @post.DateAdded.Year
-                        <br/>
-                        @:@post.Comments.Count - comments.
+                            <br />
+                            @:@post.Comments.Count - comments.
                         }
-                        <br/>
+                        <br />
                     </small>
                 </article>
             </div>

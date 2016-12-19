@@ -14,24 +14,7 @@
         <dl class="dl-horizontal">
             <dt>Profile picture:</dt>
             <dd>
-                @if (User.Identity.GetUserName() != null)
-                {
-                    var imgUrl = Url.Content("~/Content/images/" + User.Identity.GetUserName() + ".png") +
-                                 "? time=" + DateTime.Now.ToString();
-                    <div class="upimage">
-                        <div class="accimg">
-                            <img src="@imgUrl" height="250" width="250"/>
-                        </div>
-                        <div class="mngimg">
-                            @using (Html.BeginForm("UploadPhoto", "Manage", FormMethod.Post, new {enctype = "multipart/form-data"}))
-                            {
-                                <div class="btn btn-default browseimg">
-                                    <input type="file" name="file" id="files" onchange="this.form.submit()"/>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                }
+                
             </dd>
             <dt>Password:</dt>
             <dd>

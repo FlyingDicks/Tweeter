@@ -12,6 +12,7 @@ namespace FlyingDicksTweeter.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public byte[] UserPhoto { get; set; }
         [Required]
         public string FullName { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

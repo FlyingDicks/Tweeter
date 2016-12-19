@@ -18,11 +18,8 @@
                 </li>
             }
             <li>
-                @{
-                    var imgUrl = Url.Content("~/Content/images/" + User.Identity.GetUserName() + ".png") +
-                    "? time=" + DateTime.Now.ToString();
-                }
-               <img src="@imgUrl" height="50" width="50"/>
+                <img src="@Url.Action("UserPhotos", "Home" )" height="48" width="48" />
+
             </li>
             <li>
                 @Html.ActionLink("Create", "Create", "Post")
