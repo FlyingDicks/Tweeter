@@ -13,16 +13,6 @@
                         <h4>
                             @Html.ActionLink(@post.Author.FullName + " duckered", "Details", "Post", new { @id = post.Id }, null)
                         </h4>
-                        <div id="fb-root"></div>
-                        <script>
-                        (function (d, s, id) {
-                            var js, fjs = d.getElementsByTagName(s)[0];
-                            if (d.getElementById(id)) return;
-                            js = d.createElement(s); js.id = id;
-                            js.src = "//connect.facebook.net/bg_BG/sdk.js#xfbml=1&version=v2.8";
-                            fjs.parentNode.insertBefore(js, fjs);
-                        }(document, 'script', 'facebook-jssdk'));
-                        </script>
                     </header>
                     <p>
                         @foreach (var word in post.Content.Split())

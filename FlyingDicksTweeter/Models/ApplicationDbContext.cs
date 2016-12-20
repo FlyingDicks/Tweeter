@@ -19,6 +19,7 @@ namespace FlyingDicksTweeter.Models
         public virtual IDbSet<Post> Posts { get; set; }
         public virtual IDbSet<Tag> Tags { get; set; }
         public virtual IDbSet<Comment> Comments { get; set; }
+        public virtual IDbSet<Chat> Chat { get; set; }
 
         public static ApplicationDbContext Create()
         {
