@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FlyingDicksTweeter.Models;
+using System.Data.Entity;
 
 namespace FlyingDicksTweeter.Controllers
 {
@@ -60,6 +61,28 @@ namespace FlyingDicksTweeter.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditImage (HttpPostedFileBase userPhoto)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var user = db.Users.Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+                if (user == null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                if (userPhoto != null)
+                {
+
+                    user.UserPhoto = new byte[userPhoto.ContentLength];
+                    userPhoto.InputStream.Read(user.UserPhoto, 0, userPhoto.ContentLength);
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("Index", "Manage");
         }
 
         //
