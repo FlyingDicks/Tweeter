@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Services.Description;
 using FlyingDicksTweeter.Models;
 using Chat = FlyingDicksTweeter.Models.Chat;
 
@@ -15,6 +12,12 @@ namespace FlyingDicksTweeter.Controllers
         public ActionResult StartChat(string name)
         {
             Session["user"] = name;
+            using (var context = new ApplicationDbContext())
+            {
+                var messages = context.Chat.OrderByDescending(msg => msg.Date).ToList();
+                ViewBag.messagesCount = messages.Count;
+                ViewBag.messages = messages; 
+            }
             return View("StartChat");
         }
 
@@ -27,11 +30,12 @@ namespace FlyingDicksTweeter.Controllers
                 Date = DateTime.Now,
                 Content = msg
             };
-            var dbContext = new ApplicationDbContext();
 
-            dbContext.Chat.Add(message);
-            dbContext.SaveChanges();
-
+            using(var dbContext = new ApplicationDbContext())
+            {
+                dbContext.Chat.Add(message);
+                dbContext.SaveChanges();
+            }
 
             return PartialView("Message", message);
         }

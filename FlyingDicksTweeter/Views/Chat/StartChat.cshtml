@@ -18,4 +18,23 @@
 
     @Html.TextBox("msg")
     <input type="submit" value="Send" />
+
+    if(ViewBag.messagesCount > 0)
+    {
+        <table class="table-bordered table-striped table">
+            <tr>
+                <td>Name</td>
+                <td>Date</td>
+                <td>Content</td>
+            </tr>
+            @foreach (var item in ViewBag.messages)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Date</td>
+                    <td>@item.Content</td>
+                </tr>
+            }
+        </table>
+    }
 }

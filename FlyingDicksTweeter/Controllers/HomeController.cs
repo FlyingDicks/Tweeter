@@ -24,9 +24,11 @@ namespace FlyingDicksTweeter.Controllers
 
         public FileContentResult UserPhotos()
         {
+            FileContentResult result;
+
             if (User.Identity.IsAuthenticated)
             {
-                String userId = User.Identity.GetUserId();
+                string userId = User.Identity.GetUserId();
 
                 if (userId == null)
                 {
@@ -35,32 +37,50 @@ namespace FlyingDicksTweeter.Controllers
                     byte[] imageData = null;
                     FileInfo fileInfo = new FileInfo(fileName);
                     long imageFileLength = fileInfo.Length;
-                    FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                    BinaryReader br = new BinaryReader(fs);
-                    imageData = br.ReadBytes((int)imageFileLength);
+                    using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                    {
 
-                    return File(imageData, "image/png");
-
+                        using (BinaryReader br = new BinaryReader(fs))
+                        {
+                            imageData = br.ReadBytes((int)imageFileLength);
+                            return File(imageData, "image/png");
+                        }
+                    }
                 }
-                // to get the user details to load user Image 
-                var bdUsers = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
-                var userImage = bdUsers.Users.Where(x => x.Id == userId).FirstOrDefault();
 
-                return new FileContentResult(userImage.UserPhoto, "image/jpeg");
+                // to get the user details to load user Image 
+                using (var dbUsers = HttpContext.GetOwinContext().Get<ApplicationDbContext>())
+                {
+                    var user = dbUsers.Users.Where(x => x.Id == userId).FirstOrDefault();
+                    if (user != null && user.UserPhoto != null)
+                    {
+                        result = new FileContentResult(user?.UserPhoto, "image/jpeg");
+                    }
+                    else
+                    {
+                        result = GetDefaultImage();
+                    }
+                }
             }
             else
             {
-                string fileName = HttpContext.Server.MapPath(@"~/Images/noImg.svg");
-
-                byte[] imageData = null;
-                FileInfo fileInfo = new FileInfo(fileName);
-                long imageFileLength = fileInfo.Length;
-                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fs);
-                imageData = br.ReadBytes((int)imageFileLength);
-                return File(imageData, "image/png");
-
+                result = GetDefaultImage();
             }
+
+            return result;
+        }
+
+        private FileContentResult GetDefaultImage()
+        {
+            string fileName = HttpContext.Server.MapPath(@"~/Images/noImg.svg");
+
+            byte[] imageData = null;
+            FileInfo fileInfo = new FileInfo(fileName);
+            long imageFileLength = fileInfo.Length;
+            FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            BinaryReader br = new BinaryReader(fs);
+            imageData = br.ReadBytes((int)imageFileLength);
+            return File(imageData, "image/png");
         }
     }
 }

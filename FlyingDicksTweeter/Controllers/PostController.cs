@@ -48,6 +48,7 @@ namespace FlyingDicksTweeter.Controllers
                 return View(post);
             }
         }
+
         [Authorize]
         public ActionResult Create()
         {
@@ -56,6 +57,7 @@ namespace FlyingDicksTweeter.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateInput(false)]
         public ActionResult Create(Post post, HttpPostedFileBase image1)
         {
             if (ModelState.IsValid)
